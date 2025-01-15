@@ -1,6 +1,7 @@
 package dev.jonogoh.giftngo.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -16,14 +17,14 @@ import org.springframework.mock.web.MockMultipartFile;
 
 import dev.jonogoh.giftngo.domain.Entry;
 import dev.jonogoh.giftngo.util.FileParser;
-import dev.jonogoh.giftngo.util.FileValidationUtil;
+import dev.jonogoh.giftngo.util.FIleValidator;
 import dev.jonogoh.giftngo.util.OutcomeTransformer;
 
 @SpringBootTest
 public class FileProcessorServiceTest {
 
   @Mock
-  private FileValidationUtil validationUtil;
+  private FIleValidator validationUtil;
 
   @Mock
   private FileParser fileParser;
@@ -36,9 +37,8 @@ public class FileProcessorServiceTest {
 
   @Test
   void processFile_success() throws Exception {
-
     MockMultipartFile mockFile = new MockMultipartFile(
-        "file", "test.txt", "text/plain", "sample data".getBytes());
+        "file", "EntryFile.txt", "multipart/form-data", "sample data".getBytes());
     List<Entry> mockEntries = Collections.singletonList(Entry.builder()
         .uuid("uuid")
         .id("id")
@@ -58,6 +58,20 @@ public class FileProcessorServiceTest {
     assertEquals(mockOutcome, result);
     verify(fileParser, times(1)).parse(any());
     verify(outcomeTransformer, times(1)).transform(mockEntries);
+  }
 
+  @Test
+  void processFile_invalidFile() throws Exception {
+    MockMultipartFile invalidFile = new MockMultipartFile(
+        "file", "EntryFile.txt", "multipart/form-data", "".getBytes());
+
+    when(fileParser.parse(any())).thenThrow(new IllegalArgumentException("Invalid file"));
+
+    Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+      fileProcessorService.processFile(invalidFile);
+    });
+
+    assertEquals("Invalid file", exception.getMessage());
+    verify(fileParser, times(1)).parse(any());
   }
 }

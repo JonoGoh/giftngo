@@ -43,7 +43,7 @@ public class FileProcessorControllerTest {
   @Test
   void testProcessFile_emptyFile() throws Exception {
     MockMultipartFile emptyFile = new MockMultipartFile(
-        "file", "empty.txt", "text/plain", "".getBytes());
+        "file", "EntryFile.txt", "multipart/form-data", "".getBytes());
 
     mockMvc.perform(multipart("/api/files/process")
         .file(emptyFile)

@@ -1,9 +1,10 @@
 package dev.jonogoh.giftngo.controller;
 
+import static org.springframework.http.HttpHeaders.CONTENT_DISPOSITION;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +36,8 @@ public class FileProcessorController {
       ByteArrayResource resource = new ByteArrayResource(outcomeJson.getBytes());
 
       return ResponseEntity.ok()
-          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"OutcomeFile.json\"")
-          .contentType(MediaType.APPLICATION_JSON)
+          .header(CONTENT_DISPOSITION, "attachment; filename=\"OutcomeFile.json\"")
+          .contentType(APPLICATION_JSON)
           .body(resource);
     } catch (Exception e) {
       log.error(null, e);

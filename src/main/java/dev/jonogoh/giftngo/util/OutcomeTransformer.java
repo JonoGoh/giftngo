@@ -6,24 +6,21 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import dev.jonogoh.giftngo.domain.Entry;
 import dev.jonogoh.giftngo.domain.Outcome;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class OutcomeTransformer {
 
-  public String transform(List<Entry> entries) throws Exception {
-    List<Outcome> outcomes = entries.stream()
+  public List<Outcome> transform(List<Entry> entries) throws Exception {
+    return entries.stream()
         .map(entry -> Outcome.builder()
             .name(entry.getName())
             .transport(entry.getTransport())
             .topSpeed(entry.getTopSpeed())
             .build())
         .collect(toList());
-
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(outcomes);
   }
 }

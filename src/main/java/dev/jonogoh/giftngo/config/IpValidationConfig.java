@@ -1,5 +1,7 @@
 package dev.jonogoh.giftngo.config;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -9,8 +11,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Component
-@ConfigurationProperties("feature")
-public class FeatureFlagConfig {
+@ConfigurationProperties("validation")
+public class IpValidationConfig {
 
-  private boolean validationEnabled;
+  private List<String> blockedCountries;
+  private List<String> blockedIsps;
 }

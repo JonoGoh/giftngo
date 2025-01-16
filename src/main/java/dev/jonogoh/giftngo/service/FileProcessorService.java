@@ -6,27 +6,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import dev.jonogoh.giftngo.domain.Entry;
-import dev.jonogoh.giftngo.util.FileParser;
-import dev.jonogoh.giftngo.util.FIleValidator;
+import dev.jonogoh.giftngo.domain.Outcome;
+import dev.jonogoh.giftngo.domain.RequestLog;
 import dev.jonogoh.giftngo.util.OutcomeTransformer;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FileProcessorService {
 
-  @NonNull
-  private final FIleValidator validationUtils;
+  private final FileValidationService fileValidator;
 
-  @NonNull
-  private final FileParser fileParser;
+  private final FileParserService fileParser;
 
-  @NonNull
   private final OutcomeTransformer transformer;
 
-  public String processFile(MultipartFile file) throws Exception {
-    validationUtils.validate(file);
+  public List<Outcome> processFile(MultipartFile file, RequestLog log) throws Exception {
+    fileValidator.validate(file, log);
 
     List<Entry> entries = fileParser.parse(file);
     return transformer.transform(entries);

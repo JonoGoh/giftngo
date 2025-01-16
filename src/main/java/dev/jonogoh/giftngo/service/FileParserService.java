@@ -1,17 +1,17 @@
-package dev.jonogoh.giftngo.util;
+package dev.jonogoh.giftngo.service;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import dev.jonogoh.giftngo.domain.Entry;
 
-@Component
-public class FileParser {
+@Service
+public class FileParserService {
 
   public List<Entry> parse(MultipartFile file) throws Exception {
     List<Entry> entries = new ArrayList<>();

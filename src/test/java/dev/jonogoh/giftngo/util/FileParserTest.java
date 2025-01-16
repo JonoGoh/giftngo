@@ -1,15 +1,20 @@
 package dev.jonogoh.giftngo.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import dev.jonogoh.giftngo.domain.Entry;
+import dev.jonogoh.giftngo.service.FileParserService;
 
+@ExtendWith(MockitoExtension.class)
 public class FileParserTest {
 
-  private final FileParser fileParser = new FileParser();
+  private final FileParserService fileParser = new FileParserService();
 
   @Test
   void testParse() throws Exception {
@@ -22,8 +27,8 @@ public class FileParserTest {
         .name("John Smith")
         .likes("Likes Apricots")
         .transport("Rides A Bike")
-        .avgSpeed(Double.valueOf(6.2))
-        .topSpeed(Double.valueOf(12.1))
+        .avgSpeed(6.2)
+        .topSpeed(12.1)
         .build());
 
     List<Entry> entries = fileParser.parse(mockMultipartFile);

@@ -9,25 +9,27 @@ import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
 import dev.jonogoh.giftngo.domain.Entry;
-import dev.jonogoh.giftngo.util.FileParser;
-import dev.jonogoh.giftngo.util.FIleValidator;
+import dev.jonogoh.giftngo.domain.Outcome;
+import dev.jonogoh.giftngo.domain.RequestLog;
 import dev.jonogoh.giftngo.util.OutcomeTransformer;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class )
 public class FileProcessorServiceTest {
 
   @Mock
-  private FIleValidator validationUtil;
+  private FileValidationService fileValidator;
 
   @Mock
-  private FileParser fileParser;
+  private FileParserService fileParser;
 
   @Mock
   private OutcomeTransformer outcomeTransformer;
@@ -48,12 +50,18 @@ public class FileProcessorServiceTest {
         .avgSpeed(10.0)
         .topSpeed(20.0)
         .build());
-    String mockOutcome = "[{\"name\":\"name\",\"transport\":\"transport\",\"topSpeed\":20.0}]";
+    RequestLog log = new RequestLog();
+
+    List<Outcome> mockOutcome = List.of(Outcome.builder()
+        .name("name")
+        .transport("transport")
+        .topSpeed(20.0)
+        .build());
 
     when(fileParser.parse(any())).thenReturn(mockEntries);
     when(outcomeTransformer.transform(mockEntries)).thenReturn(mockOutcome);
 
-    String result = fileProcessorService.processFile(mockFile);
+    List<Outcome> result = fileProcessorService.processFile(mockFile, log);
 
     assertEquals(mockOutcome, result);
     verify(fileParser, times(1)).parse(any());
@@ -64,11 +72,12 @@ public class FileProcessorServiceTest {
   void processFile_invalidFile() throws Exception {
     MockMultipartFile invalidFile = new MockMultipartFile(
         "file", "EntryFile.txt", "multipart/form-data", "".getBytes());
+        RequestLog log = new RequestLog();
 
     when(fileParser.parse(any())).thenThrow(new IllegalArgumentException("Invalid file"));
 
     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-      fileProcessorService.processFile(invalidFile);
+      fileProcessorService.processFile(invalidFile, log);
     });
 
     assertEquals("Invalid file", exception.getMessage());

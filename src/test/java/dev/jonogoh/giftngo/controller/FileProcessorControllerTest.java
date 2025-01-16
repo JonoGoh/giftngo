@@ -44,15 +44,4 @@ public class FileProcessorControllerTest {
         .contentType(MULTIPART_FORM_DATA))
         .andExpect(status().isOk());
   }
-
-  // @Test
-  // void testProcessFile_emptyFile() throws Exception {
-  //   MockMultipartFile emptyFile = new MockMultipartFile(
-  //       "file", "EntryFile.txt", "multipart/form-data", "".getBytes());
-
-  //   mockMvc.perform(multipart("/api/files/process")
-  //       .file(emptyFile)
-  //       .contentType(MULTIPART_FORM_DATA))
-  //       .andExpect(status().isBadRequest());
-  // }
 }

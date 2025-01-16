@@ -19,7 +19,7 @@ public class FileParserService {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
       String line;
       while ((line = reader.readLine()) != null) {
-        String[] parts = line.split("\\|");
+        String[] parts = line.trim().split("\\|");
         if (parts.length == 7) {
           entries.add(Entry.builder()
               .uuid(parts[0])

@@ -6,21 +6,19 @@ import org.springframework.web.client.RestTemplate;
 
 import dev.jonogoh.giftngo.config.IpValidationConfig;
 import dev.jonogoh.giftngo.exception.IpBlockedException;
-import lombok.AllArgsConstructor;
-import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class IpValidationService {
 
-  @NonNull
   private final IpValidationConfig ipValidationConfig;
+
+  private final RestTemplate restTemplate;
 
   private static final String IP_API_URL = "http://ip-api.com/json/";
 
-  @SuppressWarnings("unchecked")
   public Map<String, String> validateIp(String ip) {
-    RestTemplate restTemplate = new RestTemplate();
     Map<String, Object> response = restTemplate.getForObject(IP_API_URL + ip, Map.class);
 
     if (response == null || !"success".equals(response.get("status"))) {
@@ -38,6 +36,9 @@ public class IpValidationService {
   }
 
   private void validateCountry(String country) {
+    System.out.println(ipValidationConfig.getBlockedCountries().toString());
+    System.out.println(country);
+    System.out.println("AHHHHHHHHHHHHHHHHHHHH");
     if (ipValidationConfig.getBlockedCountries().contains(country)) {
       throw new IpBlockedException("IP from blocked country: " + country);
     }

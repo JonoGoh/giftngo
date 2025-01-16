@@ -2,8 +2,6 @@ package dev.jonogoh.giftngo.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import static java.util.UUID.randomUUID;
-
 import org.springframework.stereotype.Service;
 
 import dev.jonogoh.giftngo.domain.RequestLog;
@@ -19,7 +17,6 @@ public class RequestLoggerService {
 
   public RequestLog initializeLog(HttpServletRequest request) {
     RequestLog initialLog = new RequestLog();
-    initialLog.setId(randomUUID());
     initialLog.setRequestUri(request.getRequestURI());
     initialLog.setRequestTimestamp(LocalDateTime.now());
     initialLog.setRequestIpAddress(request.getRemoteAddr());

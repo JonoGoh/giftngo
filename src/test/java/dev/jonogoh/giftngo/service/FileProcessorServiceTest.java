@@ -22,7 +22,7 @@ import dev.jonogoh.giftngo.domain.Outcome;
 import dev.jonogoh.giftngo.domain.RequestLog;
 import dev.jonogoh.giftngo.util.OutcomeTransformer;
 
-@ExtendWith(MockitoExtension.class )
+@ExtendWith(MockitoExtension.class)
 public class FileProcessorServiceTest {
 
   @Mock
@@ -72,7 +72,7 @@ public class FileProcessorServiceTest {
   void processFile_invalidFile() throws Exception {
     MockMultipartFile invalidFile = new MockMultipartFile(
         "file", "EntryFile.txt", "multipart/form-data", "".getBytes());
-        RequestLog log = new RequestLog();
+    RequestLog log = new RequestLog();
 
     when(fileParser.parse(any())).thenThrow(new IllegalArgumentException("Invalid file"));
 

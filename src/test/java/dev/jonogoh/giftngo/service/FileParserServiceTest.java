@@ -50,21 +50,20 @@ public class FileParserServiceTest {
 
   @Test
   void shouldParseFileWithExtraNewlines() throws Exception {
-      MockMultipartFile fileWithNewlines = new MockMultipartFile(
-          "file",
-          "FileWithNewlines.txt",
-          "text/plain",
-          """
-              
-              18148426-89e1-11ee-b9d1-0242ac120002|1X1D14|John Smith|Likes Apricots|Rides A Bike|6.2|12.1
-              
-              3ce2d17b-e66a-4c1e-bca3-40eb1c9222c7|2X2D24|Mike Smith|Likes Grape|Drives an SUV|35.0|95.5
-              
-          """.getBytes()
-      );
+    MockMultipartFile fileWithNewlines = new MockMultipartFile(
+        "file",
+        "FileWithNewlines.txt",
+        "text/plain",
+        """
 
-      List<Entry> entries = fileParserService.parse(fileWithNewlines);
+                18148426-89e1-11ee-b9d1-0242ac120002|1X1D14|John Smith|Likes Apricots|Rides A Bike|6.2|12.1
 
-      assertThat(entries).hasSize(2);
+                3ce2d17b-e66a-4c1e-bca3-40eb1c9222c7|2X2D24|Mike Smith|Likes Grape|Drives an SUV|35.0|95.5
+
+            """.getBytes());
+
+    List<Entry> entries = fileParserService.parse(fileWithNewlines);
+
+    assertThat(entries).hasSize(2);
   }
 }
